@@ -64,14 +64,12 @@ export default {
   methods: {
     async addLike() {
       try {
-        // Получаем user_id из localStorage
         const userId = localStorage.getItem("userId");
         if (!userId) {
           alert("User ID не найден в localStorage");
           return;
         }
 
-        // Отправляем POST-запрос с user_id
         const response = await axios.post(
           `http://127.0.0.1:8000/api/posts/${this.post.id}/like/`,
           {
@@ -79,12 +77,19 @@ export default {
           }
         );
 
-        // Обновляем состояние поста на основе ответа
         this.post.isLiked = !this.post.isLiked;
         this.post.likeCount = response.data.like_count;
       } catch (error) {
+        if (
+          error.response &&
+          error.response.status === 400 &&
+          error.response.data.error === "You cannot like your own post."
+        ) {
+          alert("Вы не можете лайкать свой собственный пост.");
+        } else {
+          alert("Произошла ошибка при добавлении лайка. Попробуйте снова.");
+        }
         console.error(error);
-        alert("Вы не можете добавлять лайк");
       }
     },
   },
