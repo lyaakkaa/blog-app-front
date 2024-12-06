@@ -10,38 +10,45 @@
 
       <div v-else>
         <div v-if="friends.length" class="friends-list">
-          <div v-for="friend in friends" :key="friend.id" class="friend-card">
+          <div
+            v-for="friend in friends"
+            :key="friend.friend.id"
+            class="friend-card"
+          >
             <img
-              :src="
-                friend.avatar
-                  ? friend.avatar
-                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-              "
+              :src="friend.friend.avatar ? friend.friend.avatar : defaultAvatar"
               alt="Friend Avatar"
               class="friend-avatar"
             />
             <div class="friend-details">
-              <h2>{{ friend.person_name }}</h2>
+              <h2>{{ friend.friend_name || friend.friend.person_name }}</h2>
               <p>
-                <strong>Email:</strong> {{ friend.email || "Not provided" }}
+                <strong>Email:</strong>
+                {{ friend.friend.email || "Not provided" }}
               </p>
               <p>
                 <strong>Last Activity:</strong>
                 {{
-                  friend.activity
-                    ? new Date(friend.activity).toLocaleString()
+                  friend.friend.activity
+                    ? new Date(friend.friend.activity).toLocaleString()
                     : "Not provided"
                 }}
               </p>
             </div>
             <div class="friend-actions">
-              <button @click="unfollow(friend.id)" class="unfollow-button">
+              <button
+                @click="unfollow(friend.friend.id)"
+                class="unfollow-button"
+              >
                 Unfollow
               </button>
-              <!-- <button @click="rename(friend.id)" class="rename-button">
+              <button @click="rename(friend.friend.id)" class="rename-button">
                 Rename
-              </button> -->
-              <router-link :to="`/chat/${friend.id}`">
+              </button>
+              <button @click="resetName(friend.friend.id)" class="reset-button">
+                Reset Name
+              </button>
+              <router-link :to="`/chat/${friend.friend.id}`">
                 <button class="chat-button">Chat</button>
               </router-link>
             </div>
@@ -64,6 +71,8 @@ export default {
     return {
       friends: [],
       errorMessage: "",
+      defaultAvatar:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     };
   },
   async mounted() {
@@ -115,7 +124,6 @@ export default {
         );
 
         if (response.ok) {
-          // Refresh the friends list after successfully toggling the favorite status
           await this.fetchFriends();
         } else {
           const errorData = await response.json();
@@ -125,16 +133,66 @@ export default {
         alert("Error unfollowing friend. Please try again.");
       }
     },
-    rename(friendId) {
-      const newName = prompt("Enter the new name:");
-      if (newName) {
-        alert(`Rename friend with ID: ${friendId} to ${newName}`);
-        // Add logic here for renaming if your API supports it
+    async rename(friendId) {
+      const newName = prompt("Enter the new name for your friend:");
+      if (!newName) return;
+
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("User not found.");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/users/${userId}/set_friend_name/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ friend_id: friendId, friend_name: newName }),
+          }
+        );
+
+        if (response.ok) {
+          await this.fetchFriends(); // Refresh the friends list to show the updated name
+        } else {
+          const errorData = await response.json();
+          alert(errorData.error || "Failed to rename friend.");
+        }
+      } catch (error) {
+        alert("Error renaming friend. Please try again.");
       }
     },
-    chat(friendId) {
-      alert(`Chat with friend ID: ${friendId}`);
-      // Add logic here to navigate to the chat page
+    async resetName(friendId) {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("User not found.");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/users/${userId}/set_friend_name/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ friend_id: friendId, friend_name: "" }), 
+          }
+        );
+
+        if (response.ok) {
+          await this.fetchFriends(); 
+        } else {
+          const errorData = await response.json();
+          alert(errorData.error || "Failed to reset friend's name.");
+        }
+      } catch (error) {
+        alert("Error resetting friend's name. Please try again.");
+      }
     },
   },
 };
@@ -238,5 +296,15 @@ export default {
 .chat-button {
   background-color: #3498db;
   color: white;
+}
+.reset-button {
+  background-color: #f39c12;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
 }
 </style>

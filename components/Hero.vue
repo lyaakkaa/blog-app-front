@@ -21,11 +21,13 @@
         </div>
 
         <div class="posts-grid">
-          <Post
+          <div
             v-for="(person, ind) in paginatedPersons"
             :key="person.id"
-            :post="person"
-          />
+            :class="{ 'friend-post': isFriend(person.user.id) }"
+          >
+            <Post :post="person" />
+          </div>
         </div>
 
         <div class="pagination">
@@ -60,7 +62,8 @@ export default {
       currentPage: 1,
       itemsPerPage: 4,
       menuVisible: false,
-      persons: [], // Initialize as empty array
+      persons: [], // Array for posts
+      friendsMap: {}, // Object to map user IDs to custom names
       sortingType: "date",
       selectedTopic: null,
     };
@@ -87,11 +90,11 @@ export default {
 
       // Apply sorting based on sortingType
       if (this.sortingType === "date") {
-        return _.orderBy(filtered, ["PubDate"], ["desc"]); // Match the key from fetchPosts
+        return _.orderBy(filtered, ["PubDate"], ["desc"]);
       } else if (this.sortingType === "likes") {
-        return _.orderBy(filtered, ["likeCount"], ["desc"]); // Match the key from fetchPosts
+        return _.orderBy(filtered, ["likeCount"], ["desc"]);
       } else if (this.sortingType === "name") {
-        return _.orderBy(filtered, ["PersonName"], ["asc"]); // Match the key from fetchPosts
+        return _.orderBy(filtered, ["PersonName"], ["asc"]);
       }
 
       return filtered;
@@ -119,37 +122,56 @@ export default {
     resetPage() {
       this.currentPage = 1;
     },
+    isFriend(userId) {
+      return userId in this.friendsMap;
+    },
     async fetchPosts() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/posts/");
-        console.log(response);
-        this.persons = response.data.map((post) => ({
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+          console.error("User not found.");
+          return;
+        }
+
+        // Fetch posts
+        const postsResponse = await axios.get(
+          "http://127.0.0.1:8000/api/posts/"
+        );
+        const postsData = postsResponse.data;
+
+        // Fetch friends with custom names
+        const friendsResponse = await axios.get(
+          `http://127.0.0.1:8000/api/users/${userId}/friends`
+        );
+        const friendsData = friendsResponse.data;
+
+        // Map friends to an object for easy lookup
+        this.friendsMap = friendsData.reduce((map, friend) => {
+          map[friend.friend.id] =
+            friend.friend_name || friend.friend.person_name;
+          return map;
+        }, {});
+
+        // Combine posts with custom friend names (if applicable)
+        this.persons = postsData.map((post) => ({
           id: post.id,
-          PersonName: post.user.person_name,
+          PersonName: this.friendsMap[post.user.id] || post.user.person_name, // Use custom name if available
           Avatar: post.user.avatar,
           PubDate: post.pub_date,
           Rating: post.rating,
           Commentary: post.commentary,
-          Topic: post.topic.name, // Correct mapping for topic name
+          Topic: post.topic.name,
           isLiked: post.is_liked,
           likeCount: post.like_count,
-          user: {
-            // Store full user object
-            id: post.user.id,
-            person_name: post.user.person_name,
-            avatar: post.user.avatar,
-            email: post.user.email,
-            login: post.user.login,
-            password: post.user.password,
-          },
+          user: post.user, // Store full user object for future use
         }));
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error("Error fetching posts or friends:", error);
       }
     },
   },
   mounted() {
-    this.fetchPosts(); // Fetch posts when component is mounted
+    this.fetchPosts(); // Fetch posts and friends when the component is mounted
   },
 };
 </script>

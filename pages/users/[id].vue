@@ -15,7 +15,6 @@
           alt="User Avatar"
           class="user-avatar"
         />
-
         <div class="user-details">
           <h2>{{ user.person_name }}</h2>
           <p class="user-username">@{{ user.login }}</p>
@@ -36,7 +35,12 @@
           <button @click="toggleFollow" class="follow-button">
             {{ isFollowing ? "Unfollow" : "Follow" }}
           </button>
+          <router-link :to="`/users/${user.id}/friends`">
+            <button class="friends-button">Friends</button>
+          </router-link>
+          <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
         </div>
+        
       </div>
 
       <div class="user-posts" v-if="user">
@@ -75,7 +79,7 @@ export default {
   },
   async mounted() {
     await this.fetchUserData();
-    await this.fetchIsFollowing(); 
+    await this.fetchIsFollowing();
   },
   methods: {
     toggleMenu() {
@@ -83,6 +87,8 @@ export default {
     },
     async fetchUserData() {
       const userId = this.$route.params.id;
+      const loggedInUserId = localStorage.getItem("userId");
+
       try {
         const userResponse = await fetch(
           `http://127.0.0.1:8000/api/users/${userId}`
@@ -90,6 +96,21 @@ export default {
         const userData = await userResponse.json();
 
         if (userResponse.ok) {
+          // Fetch custom name if the user is a friend
+          const nameResponse = await fetch(
+            `http://127.0.0.1:8000/api/users/${loggedInUserId}/friends`
+          );
+          const nameData = await nameResponse.json();
+
+          if (nameResponse.ok) {
+            const friend = nameData.find(
+              (friend) => friend.friend.id === parseInt(userId)
+            );
+            if (friend && friend.friend_name) {
+              userData.person_name = friend.friend_name; // Use the custom name if available
+            }
+          }
+
           this.user = userData;
         } else {
           this.errorMessage =
@@ -109,6 +130,7 @@ export default {
         this.errorMessage = "Error loading profile data. Please try again.";
       }
     },
+
     async toggleFollow() {
       const loggedInUserId = localStorage.getItem("userId");
       const favoriteUserId = this.$route.params.id;
@@ -138,8 +160,8 @@ export default {
       }
     },
     async fetchIsFollowing() {
-      const userId = this.$route.params.id; 
-      const loggedInUserId = localStorage.getItem("userId"); 
+      const userId = this.$route.params.id;
+      const loggedInUserId = localStorage.getItem("userId");
 
       try {
         const response = await fetch(
@@ -306,5 +328,20 @@ h1 {
 .user-field span {
   font-weight: bold;
   color: #333;
+}
+.friends-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.friends-button:hover {
+  background-color: #16a085;
 }
 </style>
