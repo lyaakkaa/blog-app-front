@@ -15,6 +15,7 @@
           alt="User Avatar"
           class="user-avatar"
         />
+
         <div class="user-details">
           <h2>{{ user.person_name }}</h2>
           <p class="user-username">@{{ user.login }}</p>
@@ -53,8 +54,6 @@
         </div>
         <p v-else class="no-posts">No posts available.</p>
       </div>
-
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     </div>
   </div>
 </template>
@@ -76,7 +75,7 @@ export default {
   },
   async mounted() {
     await this.fetchUserData();
-    this.checkIfFollowing();
+    await this.fetchIsFollowing(); 
   },
   methods: {
     toggleMenu() {
@@ -92,7 +91,6 @@ export default {
 
         if (userResponse.ok) {
           this.user = userData;
-          this.checkIfFollowing();
         } else {
           this.errorMessage =
             userData.error || "Failed to load user information.";
@@ -139,12 +137,34 @@ export default {
           "Error following/unfollowing user. Please try again.";
       }
     },
-    checkIfFollowing() {
-      const favoriteUserId = parseInt(this.$route.params.id);
-      if (this.user && this.user.favorite_users) {
-        this.isFollowing = this.user.favorite_users.some(
-          (favorite) => favorite.id === favoriteUserId
+    async fetchIsFollowing() {
+      const userId = this.$route.params.id; 
+      const loggedInUserId = localStorage.getItem("userId"); 
+
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/users/is_favorite/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_id: userId,
+              logged_in_user_id: loggedInUserId,
+            }),
+          }
         );
+
+        const data = await response.json();
+
+        if (response.ok) {
+          this.isFollowing = data.is_following;
+        } else {
+          this.errorMessage = data.error || "Failed to check follow status.";
+        }
+      } catch (error) {
+        this.errorMessage = "Error checking follow status. Please try again.";
       }
     },
   },
