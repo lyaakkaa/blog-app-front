@@ -4,7 +4,11 @@
       <div class="card__user">
         <img
           class="card__avatar"
-          :src="post.Avatar ? post.Avatar : '_nuxt/src/assets/no_pfp.svg'"
+          :src="
+            post.Avatar
+              ? `http://127.0.0.1:8000${post.Avatar}`
+              : '_nuxt/src/assets/no_pfp.svg'
+          "
           alt="Avatar"
         />
       </div>
