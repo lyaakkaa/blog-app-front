@@ -118,7 +118,9 @@
           Save
         </button>
         <button @click="goToFriends" class="friends-button">Friends</button>
-        <button @click="goToStatistic" class="statistic-button">Statistic</button>
+        <button @click="goToStatistic" class="statistic-button">
+          Statistic
+        </button>
       </div>
 
       <div class="user-posts">
@@ -209,28 +211,35 @@ export default {
       formData.append("person_name", this.user.person_name);
       formData.append("email", this.user.email);
       formData.append("login", this.user.login);
-      formData.append("password", this.user.password);
-      formData.append("age", this.user.age);
-      formData.append("location", this.user.location || null);
-      formData.append("activity", this.user.activity);
-      if (this.newAvatar) {
-        formData.append("avatar", this.newAvatar);
-      }
+
+      // Добавляем только те поля, которые изменились
+      if (this.user.password) formData.append("password", this.user.password);
+      if (this.user.age) formData.append("age", this.user.age);
+      if (this.user.location) formData.append("location", this.user.location);
+      if (this.newAvatar) formData.append("avatar", this.newAvatar);
 
       try {
         const response = await fetch(
           `http://127.0.0.1:8000/api/users/${userId}/`,
           {
-            method: "PUT",
+            method: "PATCH", // Используем PATCH вместо PUT
             body: formData,
           }
         );
 
         if (response.ok) {
+          const updatedUser = await response.json();
+
+          // Сохраняем favorites, если сервер не возвращает их
+          const currentFavorites = this.user.favorite_users || [];
+          this.user = {
+            ...this.user,
+            ...updatedUser,
+            favorite_users: updatedUser.favorite_users || currentFavorites,
+          };
+
           this.editMode = false;
           this.errorMessage = "";
-          const updatedUser = await response.json();
-          this.user = updatedUser;
         } else {
           const errorData = await response.json();
           this.errorMessage = errorData.error || "Failed to update profile.";
@@ -250,6 +259,7 @@ export default {
 </script>
 
 <style scoped>
+/* Контейнер профиля */
 .profile-container {
   max-width: 600px;
   margin: 20px auto;
@@ -259,8 +269,10 @@ export default {
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   color: black;
+  overflow: auto;
 }
 
+/* Заголовок профиля */
 .profile-header {
   display: flex;
   flex-direction: column;
@@ -270,8 +282,8 @@ export default {
 
 .user-avatar {
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   margin-bottom: 10px;
 }
@@ -280,8 +292,10 @@ h1 {
   color: #333;
   font-size: 24px;
   font-weight: bold;
+  margin: 10px 0;
 }
 
+/* Информация о пользователе */
 .user-info {
   background-color: #ffffff;
   border-radius: 12px;
@@ -314,6 +328,7 @@ h1 {
   margin-top: 10px;
 }
 
+/* Группа кнопок */
 .button-group {
   display: flex;
   gap: 12px;
@@ -348,11 +363,12 @@ h1 {
   color: white;
 }
 
-.statistic-button{
+.statistic-button {
   background-color: #e131e7;
   color: white;
 }
 
+/* Посты */
 .user-posts h2 {
   color: #333;
   font-size: 20px;
@@ -391,9 +407,112 @@ h1 {
   color: #555;
 }
 
+/* Ошибка */
 .error-message {
   color: #e74c3c;
   font-size: 14px;
   margin-top: 10px;
+}
+
+/* --- Адаптивность для планшетов (макс. ширина: 768px) --- */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 15px;
+  }
+
+  .user-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .user-info {
+    padding: 15px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .edit-button,
+  .save-button,
+  .friends-button,
+  .statistic-button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .user-posts h2 {
+    font-size: 18px;
+  }
+
+  .post-header h3 {
+    font-size: 14px;
+  }
+
+  .post-date {
+    font-size: 16px;
+  }
+
+  .post-content,
+  .post-rating,
+  .post-likes {
+    font-size: 12px;
+  }
+}
+
+/* --- Адаптивность для мобильных устройств (макс. ширина: 480px) --- */
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 10px;
+  }
+
+  .user-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  .user-info {
+    padding: 10px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .edit-button,
+  .save-button,
+  .friends-button,
+  .statistic-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .user-posts h2 {
+    font-size: 18px;
+  }
+
+  .post-header h3 {
+    font-size: 12px;
+  }
+
+  .post-date {
+    font-size: 10px;
+  }
+
+  .post-content,
+  .post-rating,
+  .post-likes {
+    font-size: 10px;
+  }
 }
 </style>

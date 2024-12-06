@@ -21,7 +21,9 @@
               <p class="user-email">{{ user.email }}</p>
               <p class="user-login">Username: {{ user.login }}</p>
             </div>
-            <button @click="removeFromFavorites(user.id)" class="delete-button">Remove</button>
+            <button @click="removeFromFavorites(user.id)" class="delete-button">
+              Remove
+            </button>
           </div>
         </div>
         <p v-else class="no-favorites-message">No favorite users found.</p>
@@ -89,12 +91,17 @@ export default {
         }
 
         // Send a POST request to toggle the favorite status
-        await axios.post(`http://127.0.0.1:8000/api/users/${userId}/toggle_favorite/`, {
-          favorite_user_id: favoriteUserId,
-        });
+        await axios.post(
+          `http://127.0.0.1:8000/api/users/${userId}/toggle_favorite/`,
+          {
+            favorite_user_id: favoriteUserId,
+          }
+        );
 
         // Remove the user from the local favoriteUsers array
-        this.favoriteUsers = this.favoriteUsers.filter(user => user.id !== favoriteUserId);
+        this.favoriteUsers = this.favoriteUsers.filter(
+          (user) => user.id !== favoriteUserId
+        );
       } catch (error) {
         console.error("Error removing user from favorites:", error);
       }
@@ -179,7 +186,6 @@ h1 {
   color: #777;
 }
 
-/* Style for the delete button */
 .delete-button {
   background-color: #e57373;
   color: white;
@@ -193,5 +199,148 @@ h1 {
 
 .delete-button:hover {
   background-color: #d32f2f;
+}
+
+/* --- Адаптивность для планшетов (макс. ширина: 1024px) --- */
+@media (max-width: 1024px) {
+  .favorites-container {
+    max-width: 90%;
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .favorite-user-card {
+    padding: 14px;
+  }
+
+  .user-avatar {
+    width: 45px;
+    height: 45px;
+    margin-right: 10px;
+  }
+
+  .user-info h2 {
+    font-size: 16px;
+  }
+
+  .user-email {
+    font-size: 13px;
+  }
+
+  .user-login {
+    font-size: 12px;
+  }
+
+  .delete-button {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+}
+
+/* --- Адаптивность для мобильных телефонов (макс. ширина: 768px) --- */
+@media (max-width: 768px) {
+  .favorites-container {
+    max-width: 95%;
+    padding: 14px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .favorite-user-card {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+  }
+
+  .user-info h2 {
+    font-size: 15px;
+  }
+
+  .user-email,
+  .user-login {
+    font-size: 12px;
+  }
+
+  .delete-button {
+    padding: 6px 10px;
+    font-size: 12px;
+    align-self: flex-end;
+  }
+}
+
+/* --- Адаптивность для маленьких гаджетов (макс. ширина: 480px) --- */
+@media (max-width: 480px) {
+  .favorites-container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  .favorite-user-card {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 10px;
+  }
+
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 8px;
+  }
+
+  .user-info h2 {
+    font-size: 14px;
+  }
+
+  .user-email,
+  .user-login {
+    font-size: 11px;
+  }
+
+  .delete-button {
+    padding: 4px 8px;
+    font-size: 11px;
+    align-self: flex-end;
+  }
+}
+
+/* --- Для совсем маленьких экранов (макс. ширина: 360px) --- */
+@media (max-width: 360px) {
+  .favorite-user-card {
+    padding: 8px;
+  }
+
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .user-info h2 {
+    font-size: 13px;
+  }
+
+  .user-email,
+  .user-login {
+    font-size: 10px;
+  }
+
+  .delete-button {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
 }
 </style>

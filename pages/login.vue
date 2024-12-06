@@ -80,6 +80,7 @@ export default {
   align-items: center;
   height: 100vh;
   background-color: #e9f5e9; /* Light green background */
+  padding: 1rem; /* Padding for small devices */
 }
 
 .login-box {
@@ -115,6 +116,7 @@ input[type="password"] {
   border-radius: 5px;
   margin-top: 0.5rem;
   outline: none;
+  font-size: 1rem;
 }
 
 input[type="text"]:focus,
@@ -155,5 +157,53 @@ input[type="password"]:focus {
 
 .signup-link .link:hover {
   text-decoration: underline;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .login-box {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-submit {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-submit {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .signup-link {
+    font-size: 0.9rem;
+  }
 }
 </style>

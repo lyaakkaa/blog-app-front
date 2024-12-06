@@ -163,4 +163,65 @@ export default {
   font-size: 16px;
   color: #666;
 }
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .friends-container {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .friend-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .friend-info {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .friend-avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .friend-name {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .view-profile-button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 18px;
+  }
+
+  .friend-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .friend-name {
+    font-size: 12px;
+  }
+
+  .view-profile-button {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
 </style>

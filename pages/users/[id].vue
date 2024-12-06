@@ -327,6 +327,7 @@ h1 {
   margin-top: 20px;
   font-size: 14px;
 }
+
 .user-field {
   margin: 5px 0;
   font-size: 16px;
@@ -337,6 +338,7 @@ h1 {
   font-weight: bold;
   color: #333;
 }
+
 .friends-button {
   margin-top: 10px;
   padding: 10px 20px;
@@ -351,5 +353,93 @@ h1 {
 
 .friends-button:hover {
   background-color: #16a085;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .user-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .user-details h2 {
+    font-size: 18px;
+  }
+
+  .user-field {
+    font-size: 14px;
+  }
+
+  .follow-button,
+  .friends-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .user-posts h2 {
+    font-size: 18px;
+  }
+
+  .post-header h3 {
+    font-size: 16px;
+  }
+
+  .post-content,
+  .post-rating,
+  .post-likes {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .user-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-details h2 {
+    font-size: 16px;
+  }
+
+  .user-field {
+    font-size: 12px;
+  }
+
+  .follow-button,
+  .friends-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .user-posts h2 {
+    font-size: 16px;
+  }
+
+  .post-header h3 {
+    font-size: 14px;
+  }
+
+  .post-content,
+  .post-rating,
+  .post-likes {
+    font-size: 12px;
+  }
 }
 </style>

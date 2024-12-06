@@ -143,6 +143,12 @@ header .icon {
   background: #f0f0f0;
 }
 
+@media (max-width: 1024px) {
+  .header-rectangle {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .header-rectangle {
     display: none;

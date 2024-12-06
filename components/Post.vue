@@ -31,7 +31,9 @@
             :icon="['far', 'star-half-stroke']"
           />
           <font-awesome-icon
-            v-for="star in 5 - Math.floor(post.likeCount / 4) - (post.likeCount % 4 >= 2 ? 1 : 0)"
+            v-for="star in 5 -
+            Math.floor(post.likeCount / 4) -
+            (post.likeCount % 4 >= 2 ? 1 : 0)"
             :key="star"
             :icon="['far', 'star']"
           />
@@ -100,22 +102,25 @@ export default {
 };
 </script>
 <style scoped>
+/* --- Базовые стили (Desktop по умолчанию) --- */
 .card {
   background: linear-gradient(135deg, #006600, #00cc66);
   border-radius: 12px;
   padding: 24px;
   width: 600px;
+  max-width: 100%;
   text-align: left;
   color: #ffffff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   border: none;
+  margin: 20px auto;
 }
 
 .card__header {
   display: flex;
-  flex-direction: row;
   gap: 12px;
   margin-bottom: 16px;
+  align-items: center;
 }
 
 .card__info {
@@ -130,32 +135,36 @@ export default {
 
 .card__username {
   font-size: 18px;
-  color: black;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
 }
 
 .card__date {
   font-size: 14px;
-  font-weight: bold;
+  color: #d3ffd3;
+  margin-top: 5px;
 }
 
 .card__user {
   display: flex;
-  flex-direction: row;
-  gap: 16px;
   align-items: center;
+  gap: 16px;
 }
 
 .card__avatar {
-  border-radius: 100%;
+  border-radius: 50%;
   width: 56px;
   height: 56px;
   border: 2px solid #e5fa02;
+  object-fit: cover;
 }
 
 .card__content {
   font-size: 16px;
   margin-bottom: 16px;
   color: #e6ffe6;
+  line-height: 1.5;
 }
 
 .card__like-button {
@@ -164,52 +173,50 @@ export default {
   background-color: #e1e1e1;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .card__like-button:hover {
   background-color: #003300;
+  color: #ffffff;
 }
 
 .card__rating {
   display: flex;
-  flex-direction: row;
   color: #eeff04;
   gap: 4px;
 }
 
-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  color: #ffffff;
-}
-
-button i {
-  margin-right: 8px;
-}
-
-@media (max-width: 768px) {
+/* --- Для планшетов (макс. ширина: 1024px) --- */
+@media (max-width: 1024px) {
   .card {
     width: 90%;
-    padding: 16px;
+    padding: 20px;
+  }
+
+  .card__rating{
+    font-size: 9px;
+    margin-right: 10px;
   }
 
   .card__header {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
   }
-
-  .card__user {
-    gap: 8px;
+  .card__date {
+    display: none;
   }
-
   .card__username {
     font-size: 16px;
   }
 
   .card__date {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .card__content {
@@ -218,24 +225,63 @@ button i {
 
   .card__like-button {
     padding: 6px 12px;
+    font-size: 13px;
   }
 }
 
-@media (max-width: 480px) {
+/* --- Для телефонов (макс. ширина: 768px) --- */
+@media (max-width: 768px) {
   .card {
-    padding: 12px;
+    padding: 16px;
+  }
+
+  .card__avatar {
+    width: 48px;
+    height: 48px;
   }
 
   .card__username {
     font-size: 14px;
   }
 
+  .card__content {
+    font-size: 13px;
+  }
+
+  .card__like-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
   .card__date {
-    font-size: 10px;
+    display: none;
+  }
+}
+
+/* --- Для маленьких гаджетов (макс. ширина: 480px) --- */
+@media (max-width: 480px) {
+  .card {
+    padding: 12px;
+  }
+
+  .card__avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .card__username {
+    font-size: 12px;
   }
 
   .card__content {
-    font-size: 12px;
+    font-size: 11px;
+  }
+
+  .card__like-button {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  .card__date {
+    display: none;
   }
 }
 </style>

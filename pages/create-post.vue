@@ -164,4 +164,102 @@ select:focus {
   font-weight: bold;
   margin-top: 20px;
 }
+
+/* --- Адаптивность для планшетов (макс. ширина: 1024px) --- */
+@media (max-width: 1024px) {
+  .create-post-container {
+    padding: 16px;
+    max-width: 90%;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  textarea,
+  select {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .submit-button {
+    padding: 8px 16px;
+    font-size: 15px;
+  }
+}
+
+/* --- Адаптивность для телефонов (макс. ширина: 768px) --- */
+@media (max-width: 768px) {
+  .create-post-container {
+    padding: 14px;
+    max-width: 95%;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  textarea,
+  select {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  .submit-button {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+}
+
+/* --- Адаптивность для маленьких гаджетов (макс. ширина: 480px) --- */
+@media (max-width: 480px) {
+  .create-post-container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  textarea,
+  select {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  .submit-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  label {
+    font-size: 12px;
+  }
+}
+
+/* --- Для совсем маленьких экранов (макс. ширина: 360px) --- */
+@media (max-width: 360px) {
+  .create-post-container {
+    padding: 8px;
+  }
+
+  h1 {
+    font-size: 16px;
+  }
+
+  textarea,
+  select {
+    font-size: 11px;
+    padding: 4px;
+  }
+
+  .submit-button {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  label {
+    font-size: 11px;
+  }
+}
 </style>

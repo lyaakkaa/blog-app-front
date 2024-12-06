@@ -235,4 +235,58 @@ canvas {
   width: 100%;
   height: 300px;
 }
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .statistic-chart {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  .statistic-chart h1 {
+    font-size: 20px;
+  }
+
+  .date-filter {
+    gap: 10px;
+  }
+
+  .vue-datepicker {
+    max-width: 200px;
+    font-size: 12px;
+  }
+
+  .date-filter button {
+    font-size: 14px;
+    padding: 8px 15px;
+  }
+
+  .chart-container {
+    padding: 15px;
+  }
+
+  canvas {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .statistic-chart h1 {
+    font-size: 18px;
+  }
+
+  .vue-datepicker {
+    max-width: 100%;
+    font-size: 12px;
+  }
+
+  .date-filter button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  canvas {
+    height: 200px;
+  }
+}
 </style>

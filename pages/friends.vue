@@ -242,6 +242,7 @@ export default {
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
 }
 
 .friend-avatar {
@@ -255,6 +256,7 @@ export default {
   flex-grow: 1;
   padding-left: 15px;
   text-align: left;
+  min-width: 150px;
 }
 
 .friend-details h2 {
@@ -272,6 +274,7 @@ export default {
 .friend-actions {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .friend-actions button {
@@ -297,6 +300,7 @@ export default {
   background-color: #3498db;
   color: white;
 }
+
 .reset-button {
   background-color: #f39c12;
   color: white;
@@ -306,5 +310,60 @@ export default {
   font-size: 14px;
   cursor: pointer;
   font-weight: bold;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .friends-container {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  .friend-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .friend-details {
+    padding: 10px 0;
+  }
+
+  .friend-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .friend-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .friends-header h1 {
+    font-size: 20px;
+  }
+
+  .friend-card {
+    padding: 10px;
+  }
+
+  .friend-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .friend-details h2 {
+    font-size: 16px;
+  }
+
+  .friend-details p {
+    font-size: 12px;
+  }
+
+  .friend-actions button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
 }
 </style>
