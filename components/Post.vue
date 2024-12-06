@@ -17,15 +17,10 @@
           <router-link :to="`/users/${post.user.id}`" class="user-name">
             <h2 class="card__username">{{ post.PersonName }}</h2>
           </router-link>
-          <!-- <router-link :to="{ name: 'UserProfile', params: { id: post.user.id } }" class="user-name">
-            <h2 class="card__username">{{ post.PersonName }}</h2>
-          </router-link> -->
-          <!-- <h2 class="card__username">{{ post }}</h2> -->
-          <p class="card__date">{{ post.PubDate }}</p>
+          <p class="card__date">{{ formattedDate(post.PubDate) }}</p>
         </div>
 
         <div class="card__rating">
-          <!-- Звезды рейтинга -->
           <font-awesome-icon
             v-for="star in Math.floor(post.likeCount / 4)"
             :key="star"
@@ -36,9 +31,7 @@
             :icon="['far', 'star-half-stroke']"
           />
           <font-awesome-icon
-            v-for="star in 5 -
-            Math.floor(post.likeCount / 4) -
-            (post.likeCount % 4 >= 2 ? 1 : 0)"
+            v-for="star in 5 - Math.floor(post.likeCount / 4) - (post.likeCount % 4 >= 2 ? 1 : 0)"
             :key="star"
             :icon="['far', 'star']"
           />
@@ -52,7 +45,6 @@
       @click="addLike"
       :style="{ color: post.isLiked ? '#fb0000' : '#616161' }"
     >
-      <!-- Кнопка лайка -->
       <font-awesome-icon :icon="['fas', 'heart']" />
       {{ post.likeCount }}
     </button>
@@ -61,11 +53,19 @@
 
 <script>
 import axios from "axios";
+
 export default {
   props: {
     post: Object,
   },
   methods: {
+    formattedDate(dateString) {
+      if (!dateString) return "Invalid date";
+
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-EN", options);
+    },
     async addLike() {
       try {
         const userId = localStorage.getItem("userId");
@@ -99,7 +99,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .card {
   background: linear-gradient(135deg, #006600, #00cc66);

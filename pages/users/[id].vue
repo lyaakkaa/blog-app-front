@@ -49,7 +49,7 @@
           <div v-for="post in posts" :key="post.id" class="post-item">
             <div class="post-header">
               <h3>{{ post.commentary }}</h3>
-              <p class="post-date">{{ post.pub_date }}</p>
+              <p class="post-date">{{ formattedDate(post.pub_date) }}</p>
             </div>
             <p class="post-content">Topic: {{ post.topic.name }}</p>
             <p class="post-rating">Rating: {{ post.rating }} ⭐</p>
@@ -129,6 +129,14 @@ export default {
       } catch (error) {
         this.errorMessage = "Error loading profile data. Please try again.";
       }
+    },
+
+    formattedDate(dateString) {
+      if (!dateString) return "Invalid date";
+
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-EN", options);
     },
 
     async toggleFollow() {
