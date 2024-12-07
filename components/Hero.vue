@@ -218,19 +218,6 @@ export default {
   margin-bottom: 24px;
 }
 
-.pagination {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-.pagination button {
-  padding: 8px;
-  color: #d2e037;
-}
-
 .menu-btn {
   float: left;
   font-size: 24px;
@@ -241,6 +228,35 @@ export default {
 .filter-icon {
   font-size: 32px;
   color: green;
+}
+
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.pagination button {
+  padding: 10px 16px;
+  font-size: 16px;
+  color: white;
+  background-color: green;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #005500;
 }
 
 /* Адаптация для мобильных телефонов */
@@ -262,16 +278,14 @@ export default {
   }
 
   .pagination {
-    flex-direction: column; /* Изменено на column */
-    align-items: stretch; /* Растягиваем кнопки по ширине */
-    gap: 8px; /* Увеличен зазор между кнопками */
+    flex-direction: row;
+    gap: 10px;
   }
 
   .pagination button {
-    padding: 8px;
+    padding: 8px 12px;
     font-size: 14px;
-    width: 100%; /* Кнопки занимают всю ширину контейнера */
-    margin-bottom: 0; /* Убираем лишние отступы */
+    width: 100px; 
   }
 
   .filter-icon {
@@ -296,16 +310,16 @@ export default {
   }
 
   .pagination {
-    flex-direction: column; /* Остается в column */
-    align-items: stretch;
-    gap: 10px;
+    gap: 8px; 
   }
 
   .pagination button {
-    width: 100%; /* Растягиваем кнопки */
-    margin-bottom: 0;
+    width: auto; 
     padding: 6px;
     font-size: 12px;
+  }
+  .pagination span {
+    font-size: 14px; 
   }
 
   .filter-icon {
