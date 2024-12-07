@@ -102,13 +102,13 @@ export default {
 };
 </script>
 <style scoped>
-/* --- Базовые стили (Desktop по умолчанию) --- */
 .card {
   background: linear-gradient(135deg, #006600, #00cc66);
   border-radius: 12px;
   padding: 24px;
-  width: 600px;
-  max-width: 100%;
+  max-width: 600px;
+  width: 100%;
+  box-sizing: border-box;
   text-align: left;
   color: #ffffff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -118,19 +118,22 @@ export default {
 
 .card__header {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 16px;
   align-items: center;
 }
 
 .card__info {
-  width: 100%;
+  flex: 1 1 auto;
 }
 
 .card__posted {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; /* чтобы элементы могли переноситься */
+  gap: 5px; /* немного отступов между элементами */
 }
 
 .card__username {
@@ -144,12 +147,6 @@ export default {
   font-size: 14px;
   color: #d3ffd3;
   margin-top: 5px;
-}
-
-.card__user {
-  display: flex;
-  align-items: center;
-  gap: 16px;
 }
 
 .card__avatar {
@@ -175,7 +172,7 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 14px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
@@ -195,34 +192,14 @@ export default {
 /* --- Для планшетов (макс. ширина: 1024px) --- */
 @media (max-width: 1024px) {
   .card {
-    width: 90%;
     padding: 20px;
-  }
-
-  .card__rating{
-    font-size: 9px;
-    margin-right: 10px;
-  }
-
-  .card__header {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-  .card__date {
-    display: none;
   }
   .card__username {
     font-size: 16px;
   }
-
-  .card__date {
-    font-size: 13px;
-  }
-
   .card__content {
-    font-size: 14px;
+    font-size: 15px;
   }
-
   .card__like-button {
     padding: 6px 12px;
     font-size: 13px;
@@ -233,27 +210,24 @@ export default {
 @media (max-width: 768px) {
   .card {
     padding: 16px;
+    margin: 15px auto;
   }
-
   .card__avatar {
     width: 48px;
     height: 48px;
   }
-
   .card__username {
+    font-size: 15px;
+  }
+  .card__content {
     font-size: 14px;
   }
-
-  .card__content {
-    font-size: 13px;
-  }
-
   .card__like-button {
-    padding: 6px 10px;
+    padding: 5px 10px;
     font-size: 12px;
   }
-  .card__date {
-    display: none;
+  .card__rating {
+    gap: 3px;
   }
 }
 
@@ -261,6 +235,12 @@ export default {
 @media (max-width: 480px) {
   .card {
     padding: 12px;
+    margin: 10px auto;
+  }
+
+  .card__header {
+    gap: 8px;
+    align-items: flex-start;
   }
 
   .card__avatar {
@@ -269,19 +249,25 @@ export default {
   }
 
   .card__username {
-    font-size: 12px;
+    font-size: 13px;
+    line-height: 1.2;
   }
 
   .card__content {
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 1.4;
   }
 
   .card__like-button {
     padding: 4px 8px;
     font-size: 11px;
   }
-  .card__date {
-    display: none;
+
+  .card__rating {
+    font-size: 10px;
+    gap: 2px;
   }
 }
+
+
 </style>

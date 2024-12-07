@@ -195,6 +195,9 @@ export default {
 .filters {
   margin-bottom: 10px;
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .filters label {
@@ -240,20 +243,47 @@ export default {
   color: green;
 }
 
+/* Адаптация для мобильных телефонов */
 @media (max-width: 768px) {
   .posts-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr;
+    gap: 16px;
+  }
+
+  .filters {
+    flex-direction: row;
+    gap: 5px;
   }
 
   .filters select {
+    width: 100%;
+    padding: 8px;
     font-size: 14px;
   }
 
   .pagination {
-    flex-direction: column;
+    flex-direction: column; /* Изменено на column */
+    align-items: stretch; /* Растягиваем кнопки по ширине */
+    gap: 8px; /* Увеличен зазор между кнопками */
+  }
+
+  .pagination button {
+    padding: 8px;
+    font-size: 14px;
+    width: 100%; /* Кнопки занимают всю ширину контейнера */
+    margin-bottom: 0; /* Убираем лишние отступы */
+  }
+
+  .filter-icon {
+    font-size: 24px;
+  }
+
+  .box {
+    margin-top: 20px;
   }
 }
 
+/* Адаптация для маленьких гаджетов */
 @media (max-width: 480px) {
   .filters {
     margin-bottom: 5px;
@@ -262,11 +292,29 @@ export default {
   .filters select {
     width: 100%;
     padding: 8px;
+    font-size: 12px;
+  }
+
+  .pagination {
+    flex-direction: column; /* Остается в column */
+    align-items: stretch;
+    gap: 10px;
   }
 
   .pagination button {
-    width: 100%;
-    margin-bottom: 5px;
+    width: 100%; /* Растягиваем кнопки */
+    margin-bottom: 0;
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .filter-icon {
+    font-size: 20px;
+  }
+
+  .box {
+    margin-top: 10px;
   }
 }
+
 </style>
